@@ -1,76 +1,84 @@
-import { usersTable } from "@/db/schema";
-import { createSession, generateSessionToken } from "@/lib/auth";
 import { ORPCError } from "@orpc/server";
 import { setCookie } from "@tanstack/react-start/server";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
+import { usersTable } from "@/db/schema";
+import { createSession, generateSessionToken } from "@/lib/auth";
 import { baseProcedure } from "../utils";
 
-
-
 const RegisterSchema = createInsertSchema(usersTable).pick({
-  username: true,
-  password: true,
+	username: true,
+	password: true,
 });
- 
-const register = baseProcedure.input(RegisterSchema).handler(async ({input, context: {db}}) => {
-  const existingUser = await db.query.usersTable.findFirst({
-    where: eq(usersTable.username, input.username)
-  })
 
-  if (existingUser) {
-    throw new ORPCError('CONFLICT', {
-      message: 'User already exists',
-    });
-  }
+const register = baseProcedure
+	.input(RegisterSchema)
+	.handler(async ({ input, context: { db } }) => {
+		const existingUser = await db.query.usersTable.findFirst({
+			where: eq(usersTable.username, input.username),
+		});
 
-  const hashPassword = await bcrypt.hash(input.password, 10);
+		if (existingUser) {
+			throw new ORPCError("CONFLICT", {
+				message: "User already exists",
+			});
+		}
 
-  const [user] = await db.insert(usersTable).values({
-    username: input.username,
-    password: hashPassword
-  }).returning();
+		const hashPassword = await bcrypt.hash(input.password, 10);
 
-  const token = generateSessionToken();
+		const [user] = await db
+			.insert(usersTable)
+			.values({
+				username: input.username,
+				password: hashPassword,
+			})
+			.returning();
 
-  await createSession(token, user.id);
+		const token = generateSessionToken();
 
-  setCookie('sessionToken', token, {
-    httpOnly: true
-  })
-})
+		await createSession(token, user.id);
 
-const LoginSchema = RegisterSchema
-const login = baseProcedure.input(LoginSchema).handler(async ({context, input}) => {
-  const user = await context.db.query.usersTable.findFirst({
-    where: eq(usersTable.username, input.username)
-  });
+		setCookie("sessionToken", token, {
+			httpOnly: true,
+		});
+	});
 
-  if (!user) {
-    throw new ORPCError('UNAUTHORIZED', {
-      message: 'Invalid credentials',
-    });
-  }
+const LoginSchema = RegisterSchema;
+const login = baseProcedure
+	.input(LoginSchema)
+	.handler(async ({ context, input }) => {
+		const user = await context.db.query.usersTable.findFirst({
+			where: eq(usersTable.username, input.username),
+		});
 
-  const isValidPassword = await bcrypt.compare(input.password, user.password);
+		if (!user) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
+			});
+		}
 
-  if (!isValidPassword) {
-    throw new ORPCError('UNAUTHORIZED', {
-      message: 'Invalid credentials',
-    });
-  }
+		const isValidPassword = await bcrypt.compare(input.password, user.password);
 
-  const token = generateSessionToken();
+		if (!isValidPassword) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
+			});
+		}
 
-  await createSession(token, user.id);
+		const token = generateSessionToken();
 
-  setCookie('sessionToken', token, {
-    httpOnly: true
-  })
-})
+		await createSession(token, user.id);
+
+		setCookie("sessionToken", token, {
+			httpOnly: true,
+		});
+	});
+
+const me = baseProcedure.handler(async ({ context }) => context.user);
 
 export const auth = {
-  register,
-  login
-}
+	register,
+	login,
+	me,
+};
