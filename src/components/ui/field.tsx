@@ -138,7 +138,13 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
 	);
 }
 
-function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
+function FieldDescription({
+	className,
+	children,
+	...props
+}: React.ComponentProps<"p">) {
+	if (!children) return null;
+
 	return (
 		<p
 			data-slot="field-description"
@@ -149,7 +155,9 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
 				className,
 			)}
 			{...props}
-		/>
+		>
+			{children}
+		</p>
 	);
 }
 
