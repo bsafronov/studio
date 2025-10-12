@@ -1,5 +1,6 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import {
 	createRootRouteWithContext,
 	HeadContent,
@@ -8,7 +9,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -39,6 +40,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 	shellComponent: RootDocument,
 	notFoundComponent: () => <h1>Not Found</h1>,
+	ssr: false,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -48,6 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
+				<Toaster richColors />
 				<SidebarProvider>
 					<AppSidebar />
 					<main className="w-full">{children}</main>
@@ -61,7 +64,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 							name: "Tanstack Router",
 							render: <TanStackRouterDevtoolsPanel />,
 						},
-						TanStackQueryDevtools,
+						{
+							name: "Tanstack Query",
+							render: <ReactQueryDevtoolsPanel />,
+						},
 					]}
 				/>
 				<Scripts />

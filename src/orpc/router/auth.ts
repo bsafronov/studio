@@ -75,10 +75,17 @@ const login = baseProcedure
 		});
 	});
 
-const me = baseProcedure.handler(async ({ context }) => context.user);
+const currentUser = baseProcedure.handler(async ({ context: { user } }) => {
+	if (!user) return null;
+
+	return {
+		id: user.id,
+		username: user.username,
+	};
+});
 
 export const auth = {
 	register,
 	login,
-	me,
+	currentUser,
 };

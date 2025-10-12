@@ -10,6 +10,7 @@ import {
 	InputGroupButton,
 	InputGroupInput,
 } from "./ui/input-group";
+import { Spinner } from "./ui/spinner";
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
 	createFormHookContexts();
@@ -120,6 +121,7 @@ function SubscribeButton({ label }: { label: string }) {
 		<form.Subscribe selector={(state) => state.isSubmitting}>
 			{(isSubmitting) => (
 				<Button type="submit" disabled={isSubmitting}>
+					{isSubmitting && <Spinner />}
 					{label}
 				</Button>
 			)}
