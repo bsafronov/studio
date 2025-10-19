@@ -1,31 +1,52 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
+import { LucidePlus } from "lucide-react";
+import { useUser } from "@/features/auth/use-user";
 import { orpc } from "@/orpc/client";
 import { Button } from "./ui/button";
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
+	SidebarGroup,
+	SidebarGroupLabel,
 	SidebarHeader,
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
 } from "./ui/sidebar";
 
 export function AppSidebar() {
-	const { data: currentUser } = useQuery(orpc.auth.currentUser.queryOptions());
+	const user = useUser();
 	return (
 		<Sidebar>
 			<SidebarHeader>Studio</SidebarHeader>
-			<SidebarContent></SidebarContent>
+			<SidebarContent>
+				<SidebarGroup>
+					<SidebarGroupLabel>Таблицы</SidebarGroupLabel>
+					<SidebarMenu>
+						<SidebarMenuItem>
+							<SidebarMenuButton asChild>
+								<Link to="/sheets/new">
+									<LucidePlus />
+									Новая таблица
+								</Link>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					</SidebarMenu>
+				</SidebarGroup>
+			</SidebarContent>
 			<SidebarFooter>
-				{currentUser?.username}
+				{user?.username}
 				<LoginLink />
 			</SidebarFooter>
 		</Sidebar>
 	);
 }
 
-const LoginLink = () => {
+function LoginLink() {
 	const { href } = useLocation();
-	const { data } = useQuery(orpc.auth.currentUser.queryOptions());
+	const user = useUser();
 	const qc = useQueryClient();
 	const { mutate: handleLogout } = useMutation(
 		orpc.auth.logout.mutationOptions({
@@ -35,7 +56,7 @@ const LoginLink = () => {
 		}),
 	);
 
-	if (data === null) {
+	if (user === null) {
 		return (
 			<Button asChild>
 				<Link to="/auth/login" search={{ redirectUrl: href }}>
@@ -50,4 +71,4 @@ const LoginLink = () => {
 			Выйти
 		</Button>
 	);
-};
+}

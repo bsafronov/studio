@@ -122,7 +122,7 @@ function SubscribeButton({ label }: { label: string }) {
 	return (
 		<form.Subscribe selector={(state) => state.isSubmitting}>
 			{(isSubmitting) => (
-				<Button type="submit" disabled={isSubmitting}>
+				<Button type="submit" disabled={isSubmitting} className="ml-auto">
 					{isSubmitting && <Spinner />}
 					{label}
 				</Button>
