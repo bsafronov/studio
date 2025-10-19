@@ -14,13 +14,19 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SheetsIndexRouteImport } from './routes/sheets/index'
 import { Route as SheetsNewRouteImport } from './routes/sheets/new'
-import { Route as SheetsSheetIdRouteImport } from './routes/sheets/$sheetId'
 import { Route as AuthAuthRouteImport } from './routes/auth/_auth'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
-import { Route as SheetsSheetIdSettingsRouteImport } from './routes/sheets/$sheetId.settings'
+import { Route as SheetsSheetIdIndexRouteImport } from './routes/sheets/$sheetId/index'
+import { Route as SheetsSheetIdSettingsRouteImport } from './routes/sheets/$sheetId/settings'
+import { Route as SheetsSheetIdNewRouteImport } from './routes/sheets/$sheetId/new'
+import { Route as SheetsSheetIdLogsRouteImport } from './routes/sheets/$sheetId/logs'
+import { Route as SheetsSheetIdColumnsRouteImport } from './routes/sheets/$sheetId/columns'
 import { Route as AuthAuthRegisterRouteImport } from './routes/auth/_auth.register'
 import { Route as AuthAuthLoginRouteImport } from './routes/auth/_auth.login'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
+import { Route as SheetsSheetIdColumnsNewRouteImport } from './routes/sheets/$sheetId/columns.new'
+import { Route as SheetsSheetIdColumnsRowIdRouteImport } from './routes/sheets/$sheetId/columns.$rowId'
+import { Route as SheetsSheetIdColumnsColumnIdRouteImport } from './routes/sheets/$sheetId/columns.$columnId'
 
 const AuthRouteImport = createFileRoute('/auth')()
 
@@ -44,11 +50,6 @@ const SheetsNewRoute = SheetsNewRouteImport.update({
   path: '/sheets/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SheetsSheetIdRoute = SheetsSheetIdRouteImport.update({
-  id: '/sheets/$sheetId',
-  path: '/sheets/$sheetId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthAuthRoute = AuthAuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => AuthRoute,
@@ -58,10 +59,30 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SheetsSheetIdIndexRoute = SheetsSheetIdIndexRouteImport.update({
+  id: '/sheets/$sheetId/',
+  path: '/sheets/$sheetId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SheetsSheetIdSettingsRoute = SheetsSheetIdSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => SheetsSheetIdRoute,
+  id: '/sheets/$sheetId/settings',
+  path: '/sheets/$sheetId/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SheetsSheetIdNewRoute = SheetsSheetIdNewRouteImport.update({
+  id: '/sheets/$sheetId/new',
+  path: '/sheets/$sheetId/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SheetsSheetIdLogsRoute = SheetsSheetIdLogsRouteImport.update({
+  id: '/sheets/$sheetId/logs',
+  path: '/sheets/$sheetId/logs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SheetsSheetIdColumnsRoute = SheetsSheetIdColumnsRouteImport.update({
+  id: '/sheets/$sheetId/columns',
+  path: '/sheets/$sheetId/columns',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAuthRegisterRoute = AuthAuthRegisterRouteImport.update({
   id: '/register',
@@ -78,30 +99,59 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SheetsSheetIdColumnsNewRoute = SheetsSheetIdColumnsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => SheetsSheetIdColumnsRoute,
+} as any)
+const SheetsSheetIdColumnsRowIdRoute =
+  SheetsSheetIdColumnsRowIdRouteImport.update({
+    id: '/$rowId',
+    path: '/$rowId',
+    getParentRoute: () => SheetsSheetIdColumnsRoute,
+  } as any)
+const SheetsSheetIdColumnsColumnIdRoute =
+  SheetsSheetIdColumnsColumnIdRouteImport.update({
+    id: '/$columnId',
+    path: '/$columnId',
+    getParentRoute: () => SheetsSheetIdColumnsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/$': typeof ApiSplatRoute
   '/auth': typeof AuthAuthRouteWithChildren
-  '/sheets/$sheetId': typeof SheetsSheetIdRouteWithChildren
   '/sheets/new': typeof SheetsNewRoute
   '/sheets': typeof SheetsIndexRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
+  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsRouteWithChildren
+  '/sheets/$sheetId/logs': typeof SheetsSheetIdLogsRoute
+  '/sheets/$sheetId/new': typeof SheetsSheetIdNewRoute
   '/sheets/$sheetId/settings': typeof SheetsSheetIdSettingsRoute
+  '/sheets/$sheetId': typeof SheetsSheetIdIndexRoute
+  '/sheets/$sheetId/columns/$columnId': typeof SheetsSheetIdColumnsColumnIdRoute
+  '/sheets/$sheetId/columns/$rowId': typeof SheetsSheetIdColumnsRowIdRoute
+  '/sheets/$sheetId/columns/new': typeof SheetsSheetIdColumnsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/$': typeof ApiSplatRoute
   '/auth': typeof AuthAuthRouteWithChildren
-  '/sheets/$sheetId': typeof SheetsSheetIdRouteWithChildren
   '/sheets/new': typeof SheetsNewRoute
   '/sheets': typeof SheetsIndexRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
+  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsRouteWithChildren
+  '/sheets/$sheetId/logs': typeof SheetsSheetIdLogsRoute
+  '/sheets/$sheetId/new': typeof SheetsSheetIdNewRoute
   '/sheets/$sheetId/settings': typeof SheetsSheetIdSettingsRoute
+  '/sheets/$sheetId': typeof SheetsSheetIdIndexRoute
+  '/sheets/$sheetId/columns/$columnId': typeof SheetsSheetIdColumnsColumnIdRoute
+  '/sheets/$sheetId/columns/$rowId': typeof SheetsSheetIdColumnsRowIdRoute
+  '/sheets/$sheetId/columns/new': typeof SheetsSheetIdColumnsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,13 +159,19 @@ export interface FileRoutesById {
   '/api/$': typeof ApiSplatRoute
   '/auth': typeof AuthRouteWithChildren
   '/auth/_auth': typeof AuthAuthRouteWithChildren
-  '/sheets/$sheetId': typeof SheetsSheetIdRouteWithChildren
   '/sheets/new': typeof SheetsNewRoute
   '/sheets/': typeof SheetsIndexRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/_auth/login': typeof AuthAuthLoginRoute
   '/auth/_auth/register': typeof AuthAuthRegisterRoute
+  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsRouteWithChildren
+  '/sheets/$sheetId/logs': typeof SheetsSheetIdLogsRoute
+  '/sheets/$sheetId/new': typeof SheetsSheetIdNewRoute
   '/sheets/$sheetId/settings': typeof SheetsSheetIdSettingsRoute
+  '/sheets/$sheetId/': typeof SheetsSheetIdIndexRoute
+  '/sheets/$sheetId/columns/$columnId': typeof SheetsSheetIdColumnsColumnIdRoute
+  '/sheets/$sheetId/columns/$rowId': typeof SheetsSheetIdColumnsRowIdRoute
+  '/sheets/$sheetId/columns/new': typeof SheetsSheetIdColumnsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,48 +179,70 @@ export interface FileRouteTypes {
     | '/'
     | '/api/$'
     | '/auth'
-    | '/sheets/$sheetId'
     | '/sheets/new'
     | '/sheets'
     | '/api/rpc/$'
     | '/auth/login'
     | '/auth/register'
+    | '/sheets/$sheetId/columns'
+    | '/sheets/$sheetId/logs'
+    | '/sheets/$sheetId/new'
     | '/sheets/$sheetId/settings'
+    | '/sheets/$sheetId'
+    | '/sheets/$sheetId/columns/$columnId'
+    | '/sheets/$sheetId/columns/$rowId'
+    | '/sheets/$sheetId/columns/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/api/$'
     | '/auth'
-    | '/sheets/$sheetId'
     | '/sheets/new'
     | '/sheets'
     | '/api/rpc/$'
     | '/auth/login'
     | '/auth/register'
+    | '/sheets/$sheetId/columns'
+    | '/sheets/$sheetId/logs'
+    | '/sheets/$sheetId/new'
     | '/sheets/$sheetId/settings'
+    | '/sheets/$sheetId'
+    | '/sheets/$sheetId/columns/$columnId'
+    | '/sheets/$sheetId/columns/$rowId'
+    | '/sheets/$sheetId/columns/new'
   id:
     | '__root__'
     | '/'
     | '/api/$'
     | '/auth'
     | '/auth/_auth'
-    | '/sheets/$sheetId'
     | '/sheets/new'
     | '/sheets/'
     | '/api/rpc/$'
     | '/auth/_auth/login'
     | '/auth/_auth/register'
+    | '/sheets/$sheetId/columns'
+    | '/sheets/$sheetId/logs'
+    | '/sheets/$sheetId/new'
     | '/sheets/$sheetId/settings'
+    | '/sheets/$sheetId/'
+    | '/sheets/$sheetId/columns/$columnId'
+    | '/sheets/$sheetId/columns/$rowId'
+    | '/sheets/$sheetId/columns/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiSplatRoute: typeof ApiSplatRoute
   AuthRoute: typeof AuthRouteWithChildren
-  SheetsSheetIdRoute: typeof SheetsSheetIdRouteWithChildren
   SheetsNewRoute: typeof SheetsNewRoute
   SheetsIndexRoute: typeof SheetsIndexRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
+  SheetsSheetIdColumnsRoute: typeof SheetsSheetIdColumnsRouteWithChildren
+  SheetsSheetIdLogsRoute: typeof SheetsSheetIdLogsRoute
+  SheetsSheetIdNewRoute: typeof SheetsSheetIdNewRoute
+  SheetsSheetIdSettingsRoute: typeof SheetsSheetIdSettingsRoute
+  SheetsSheetIdIndexRoute: typeof SheetsSheetIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -197,13 +275,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SheetsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sheets/$sheetId': {
-      id: '/sheets/$sheetId'
-      path: '/sheets/$sheetId'
-      fullPath: '/sheets/$sheetId'
-      preLoaderRoute: typeof SheetsSheetIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth/_auth': {
       id: '/auth/_auth'
       path: '/auth'
@@ -218,12 +289,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sheets/$sheetId/': {
+      id: '/sheets/$sheetId/'
+      path: '/sheets/$sheetId'
+      fullPath: '/sheets/$sheetId'
+      preLoaderRoute: typeof SheetsSheetIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sheets/$sheetId/settings': {
       id: '/sheets/$sheetId/settings'
-      path: '/settings'
+      path: '/sheets/$sheetId/settings'
       fullPath: '/sheets/$sheetId/settings'
       preLoaderRoute: typeof SheetsSheetIdSettingsRouteImport
-      parentRoute: typeof SheetsSheetIdRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/sheets/$sheetId/new': {
+      id: '/sheets/$sheetId/new'
+      path: '/sheets/$sheetId/new'
+      fullPath: '/sheets/$sheetId/new'
+      preLoaderRoute: typeof SheetsSheetIdNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sheets/$sheetId/logs': {
+      id: '/sheets/$sheetId/logs'
+      path: '/sheets/$sheetId/logs'
+      fullPath: '/sheets/$sheetId/logs'
+      preLoaderRoute: typeof SheetsSheetIdLogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sheets/$sheetId/columns': {
+      id: '/sheets/$sheetId/columns'
+      path: '/sheets/$sheetId/columns'
+      fullPath: '/sheets/$sheetId/columns'
+      preLoaderRoute: typeof SheetsSheetIdColumnsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/_auth/register': {
       id: '/auth/_auth/register'
@@ -245,6 +344,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/rpc/$'
       preLoaderRoute: typeof ApiRpcSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/sheets/$sheetId/columns/new': {
+      id: '/sheets/$sheetId/columns/new'
+      path: '/new'
+      fullPath: '/sheets/$sheetId/columns/new'
+      preLoaderRoute: typeof SheetsSheetIdColumnsNewRouteImport
+      parentRoute: typeof SheetsSheetIdColumnsRoute
+    }
+    '/sheets/$sheetId/columns/$rowId': {
+      id: '/sheets/$sheetId/columns/$rowId'
+      path: '/$rowId'
+      fullPath: '/sheets/$sheetId/columns/$rowId'
+      preLoaderRoute: typeof SheetsSheetIdColumnsRowIdRouteImport
+      parentRoute: typeof SheetsSheetIdColumnsRoute
+    }
+    '/sheets/$sheetId/columns/$columnId': {
+      id: '/sheets/$sheetId/columns/$columnId'
+      path: '/$columnId'
+      fullPath: '/sheets/$sheetId/columns/$columnId'
+      preLoaderRoute: typeof SheetsSheetIdColumnsColumnIdRouteImport
+      parentRoute: typeof SheetsSheetIdColumnsRoute
     }
   }
 }
@@ -273,26 +393,33 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
-interface SheetsSheetIdRouteChildren {
-  SheetsSheetIdSettingsRoute: typeof SheetsSheetIdSettingsRoute
+interface SheetsSheetIdColumnsRouteChildren {
+  SheetsSheetIdColumnsColumnIdRoute: typeof SheetsSheetIdColumnsColumnIdRoute
+  SheetsSheetIdColumnsRowIdRoute: typeof SheetsSheetIdColumnsRowIdRoute
+  SheetsSheetIdColumnsNewRoute: typeof SheetsSheetIdColumnsNewRoute
 }
 
-const SheetsSheetIdRouteChildren: SheetsSheetIdRouteChildren = {
-  SheetsSheetIdSettingsRoute: SheetsSheetIdSettingsRoute,
+const SheetsSheetIdColumnsRouteChildren: SheetsSheetIdColumnsRouteChildren = {
+  SheetsSheetIdColumnsColumnIdRoute: SheetsSheetIdColumnsColumnIdRoute,
+  SheetsSheetIdColumnsRowIdRoute: SheetsSheetIdColumnsRowIdRoute,
+  SheetsSheetIdColumnsNewRoute: SheetsSheetIdColumnsNewRoute,
 }
 
-const SheetsSheetIdRouteWithChildren = SheetsSheetIdRoute._addFileChildren(
-  SheetsSheetIdRouteChildren,
-)
+const SheetsSheetIdColumnsRouteWithChildren =
+  SheetsSheetIdColumnsRoute._addFileChildren(SheetsSheetIdColumnsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiSplatRoute: ApiSplatRoute,
   AuthRoute: AuthRouteWithChildren,
-  SheetsSheetIdRoute: SheetsSheetIdRouteWithChildren,
   SheetsNewRoute: SheetsNewRoute,
   SheetsIndexRoute: SheetsIndexRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
+  SheetsSheetIdColumnsRoute: SheetsSheetIdColumnsRouteWithChildren,
+  SheetsSheetIdLogsRoute: SheetsSheetIdLogsRoute,
+  SheetsSheetIdNewRoute: SheetsSheetIdNewRoute,
+  SheetsSheetIdSettingsRoute: SheetsSheetIdSettingsRoute,
+  SheetsSheetIdIndexRoute: SheetsSheetIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

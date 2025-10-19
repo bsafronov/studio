@@ -79,6 +79,21 @@ const getSheets = baseProcedure.handler(async ({ context }) => {
 	return context.db.query.sheetsTable.findMany();
 });
 
+const GetSheetByIdSchema = z.object({ sheetId: z.string() });
+const getSheetById = baseProcedure
+	.input(GetSheetByIdSchema)
+	.handler(async ({ context, input }) => {
+		const sheet = await context.db.query.sheetsTable.findFirst({
+			where: eq(sheetsTable.id, input.sheetId),
+		});
+
+		if (!sheet) {
+			throw new ORPCError("NOT_FOUND");
+		}
+
+		return sheet;
+	});
+
 const CreateColumnSchema = createInsertSchema(sheetColumnsTable).pick({
 	name: true,
 	required: true,
@@ -303,6 +318,7 @@ export const sheet = {
 	deleteSheet,
 	updateSheet,
 	getSheets,
+	getSheetById,
 
 	createColumn,
 	deleteColumn,

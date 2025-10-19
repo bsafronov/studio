@@ -13,6 +13,9 @@ export const getRouter = () => {
 					toast.error(error.message);
 				},
 			},
+			queries: {
+				staleTime: Infinity,
+			},
 		},
 	});
 

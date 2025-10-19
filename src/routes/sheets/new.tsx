@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Form, useAppForm } from "@/components/app-form";
 import {
@@ -17,9 +17,13 @@ export const Route = createFileRoute("/sheets/new")({
 
 function RouteComponent() {
 	const navigate = useNavigate();
+	const qc = useQueryClient();
 	const { mutateAsync: createSheet } = useMutation(
 		orpc.sheet.createSheet.mutationOptions({
 			onSuccess: ({ id }) => {
+				qc.invalidateQueries({
+					queryKey: orpc.sheet.getSheets.queryKey(),
+				});
 				navigate({
 					to: "/sheets/$sheetId",
 					params: { sheetId: id },
