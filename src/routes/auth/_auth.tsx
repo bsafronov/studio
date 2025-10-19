@@ -3,7 +3,6 @@ import { GalleryVerticalEnd } from "lucide-react";
 
 export const Route = createFileRoute("/auth/_auth")({
 	component: RouteComponent,
-	ssr: false,
 });
 
 function RouteComponent() {

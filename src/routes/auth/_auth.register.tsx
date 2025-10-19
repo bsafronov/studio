@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Form, useAppForm } from "@/components/app-form";
 import {
 	Card,
@@ -16,9 +16,17 @@ export const Route = createFileRoute("/auth/_auth/register")({
 });
 
 function RouteComponent() {
+	const navigate = useNavigate();
 	const { mutateAsync: handleRegister } = useMutation(
-		orpc.auth.register.mutationOptions(),
+		orpc.auth.register.mutationOptions({
+			onSuccess: () => {
+				navigate({
+					to: "/auth/login",
+				});
+			},
+		}),
 	);
+
 	const form = useAppForm({
 		defaultValues: {
 			username: "",

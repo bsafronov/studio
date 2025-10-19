@@ -56,6 +56,7 @@ function TextField({ label, description }: FieldProps) {
 				value={field.state.value}
 				onChange={(e) => field.handleChange(e.target.value)}
 				onBlur={field.handleBlur}
+				autoComplete={field.name}
 			/>
 			<FieldDescription>{description}</FieldDescription>
 			<FieldError errors={field.state.meta.errors} />
@@ -78,6 +79,7 @@ function PasswordField({ label, description }: FieldProps) {
 					value={field.state.value}
 					onChange={(e) => field.handleChange(e.target.value)}
 					onBlur={field.handleBlur}
+					autoComplete={field.name}
 				/>
 				<InputGroupAddon align="inline-end">
 					<InputGroupButton

@@ -1,5 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { z } from "zod";
 import { Form, useAppForm } from "@/components/app-form";
 import {
 	Card,
@@ -13,11 +14,29 @@ import { orpc } from "@/orpc/client";
 
 export const Route = createFileRoute("/auth/_auth/login")({
 	component: RouteComponent,
+	validateSearch: z.object({
+		redirectUrl: z.string().optional(),
+	}),
 });
 
 function RouteComponent() {
+	const qc = useQueryClient();
+	const { redirectUrl } = Route.useSearch();
+	const navigate = useNavigate();
+
 	const { mutateAsync: handleLogin } = useMutation(
-		orpc.auth.login.mutationOptions(),
+		orpc.auth.login.mutationOptions({
+			onSuccess: () => {
+				qc.invalidateQueries({
+					queryKey: orpc.auth.currentUser.queryKey(),
+				});
+				console.log({ redirectUrl });
+
+				navigate({
+					to: redirectUrl ?? "/",
+				});
+			},
+		}),
 	);
 	const form = useAppForm({
 		defaultValues: {

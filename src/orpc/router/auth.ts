@@ -1,11 +1,11 @@
 import { ORPCError } from "@orpc/server";
-import { setCookie } from "@tanstack/react-start/server";
+import { deleteCookie, setCookie } from "@tanstack/react-start/server";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
-import { usersTable } from "@/db/schema";
+import { sessionsTable, usersTable } from "@/db/schema";
 import { createSession, generateSessionToken } from "@/lib/auth";
-import { baseProcedure } from "../utils";
+import { authProcedure, baseProcedure } from "../utils";
 
 const RegisterSchema = createInsertSchema(usersTable).pick({
 	username: true,
@@ -75,6 +75,11 @@ const login = baseProcedure
 		});
 	});
 
+const logout = authProcedure.handler(async ({ context }) => {
+	deleteCookie("sessionToken");
+	context.db.delete(sessionsTable).where(eq(sessionsTable.id, context.user.id));
+});
+
 const currentUser = baseProcedure.handler(async ({ context: { user } }) => {
 	if (!user) return null;
 
@@ -88,4 +93,5 @@ export const auth = {
 	register,
 	login,
 	currentUser,
+	logout,
 };

@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, useLocation } from "@tanstack/react-router";
 import { orpc } from "@/orpc/client";
 import { Button } from "./ui/button";
 import {
@@ -16,11 +16,38 @@ export function AppSidebar() {
 			<SidebarHeader>Studio</SidebarHeader>
 			<SidebarContent></SidebarContent>
 			<SidebarFooter>
-				{JSON.stringify(currentUser)}
-				<Button asChild>
-					<Link to="/auth/login">Войти</Link>
-				</Button>
+				{currentUser?.username}
+				<LoginLink />
 			</SidebarFooter>
 		</Sidebar>
 	);
 }
+
+const LoginLink = () => {
+	const { href } = useLocation();
+	const { data } = useQuery(orpc.auth.currentUser.queryOptions());
+	const qc = useQueryClient();
+	const { mutate: handleLogout } = useMutation(
+		orpc.auth.logout.mutationOptions({
+			onSuccess: () => {
+				qc.setQueryData(orpc.auth.currentUser.queryKey(), null);
+			},
+		}),
+	);
+
+	if (data === null) {
+		return (
+			<Button asChild>
+				<Link to="/auth/login" search={{ redirectUrl: href }}>
+					Войти
+				</Link>
+			</Button>
+		);
+	}
+
+	return (
+		<Button variant="destructive" onClick={() => handleLogout({})}>
+			Выйти
+		</Button>
+	);
+};
