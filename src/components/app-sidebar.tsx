@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
-import { LucidePlus } from "lucide-react";
+import { LucidePlus, LucideTable2 } from "lucide-react";
 import { useUser } from "@/features/auth/use-user";
 import { orpc } from "@/orpc/client";
 import { Button } from "./ui/button";
@@ -25,6 +25,15 @@ export function AppSidebar() {
 				<SidebarGroup>
 					<SidebarGroupLabel>Таблицы</SidebarGroupLabel>
 					<SidebarMenu>
+						<SidebarMenuItem>
+							<SidebarMenuButton asChild>
+								<Link to="/sheets">
+									<LucideTable2 />
+									Все таблицы
+								</Link>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+
 						<SidebarMenuItem>
 							<SidebarMenuButton asChild>
 								<Link to="/sheets/new">

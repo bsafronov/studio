@@ -311,6 +311,6 @@ export const sheet = {
 
 	createRow,
 	deleteRow,
-	getRows,
 	updateRow,
+	getRows,
 };

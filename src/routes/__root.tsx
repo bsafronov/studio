@@ -7,6 +7,7 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
@@ -52,7 +53,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<Toaster richColors />
 				<SidebarProvider>
 					<AppSidebar />
-					<main className="w-full">{children}</main>
+					<main className="w-full flex flex-col bg-muted">
+						<AppBreadcrumb />
+						{children}
+					</main>
 				</SidebarProvider>
 				<TanStackDevtools
 					config={{

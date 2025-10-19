@@ -12,6 +12,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SheetsIndexRouteImport } from './routes/sheets/index'
 import { Route as SheetsNewRouteImport } from './routes/sheets/new'
 import { Route as SheetsSheetIdRouteImport } from './routes/sheets/$sheetId'
 import { Route as AuthAuthRouteImport } from './routes/auth/_auth'
@@ -31,6 +32,11 @@ const AuthRoute = AuthRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SheetsIndexRoute = SheetsIndexRouteImport.update({
+  id: '/sheets/',
+  path: '/sheets/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SheetsNewRoute = SheetsNewRouteImport.update({
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthAuthRouteWithChildren
   '/sheets/$sheetId': typeof SheetsSheetIdRouteWithChildren
   '/sheets/new': typeof SheetsNewRoute
+  '/sheets': typeof SheetsIndexRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthAuthRouteWithChildren
   '/sheets/$sheetId': typeof SheetsSheetIdRouteWithChildren
   '/sheets/new': typeof SheetsNewRoute
+  '/sheets': typeof SheetsIndexRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/auth/_auth': typeof AuthAuthRouteWithChildren
   '/sheets/$sheetId': typeof SheetsSheetIdRouteWithChildren
   '/sheets/new': typeof SheetsNewRoute
+  '/sheets/': typeof SheetsIndexRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/_auth/login': typeof AuthAuthLoginRoute
   '/auth/_auth/register': typeof AuthAuthRegisterRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/sheets/$sheetId'
     | '/sheets/new'
+    | '/sheets'
     | '/api/rpc/$'
     | '/auth/login'
     | '/auth/register'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/sheets/$sheetId'
     | '/sheets/new'
+    | '/sheets'
     | '/api/rpc/$'
     | '/auth/login'
     | '/auth/register'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/auth/_auth'
     | '/sheets/$sheetId'
     | '/sheets/new'
+    | '/sheets/'
     | '/api/rpc/$'
     | '/auth/_auth/login'
     | '/auth/_auth/register'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   SheetsSheetIdRoute: typeof SheetsSheetIdRouteWithChildren
   SheetsNewRoute: typeof SheetsNewRoute
+  SheetsIndexRoute: typeof SheetsIndexRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sheets/': {
+      id: '/sheets/'
+      path: '/sheets'
+      fullPath: '/sheets'
+      preLoaderRoute: typeof SheetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sheets/new': {
@@ -271,6 +291,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   SheetsSheetIdRoute: SheetsSheetIdRouteWithChildren,
   SheetsNewRoute: SheetsNewRoute,
+  SheetsIndexRoute: SheetsIndexRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport
