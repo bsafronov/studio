@@ -10,9 +10,9 @@ import { orpc } from "@/orpc/client";
 type ColumnType = (typeof sheetColumnType.enumValues)[number];
 const columnTypeTranslations: Record<ColumnType, string> = {
 	string: "Строка",
-	boolean: "Да/нет",
 	number: "Число",
 	date: "Дата",
+	boolean: "Да/нет",
 };
 
 const columnTypeOptions = Object.entries(columnTypeTranslations).map(
@@ -45,12 +45,14 @@ function RouteComponent() {
 		defaultValues: {
 			type: "string" as (typeof sheetColumnType.enumValues)[number],
 			name: "",
+			required: true,
 		},
-		onSubmit: async ({ value: { name, type } }) => {
+		onSubmit: async ({ value: { name, type, required } }) => {
 			await createColumn({
 				name,
 				type,
 				sheetId,
+				required: type === "boolean" ? false : required,
 			});
 		},
 	});
@@ -71,11 +73,22 @@ function RouteComponent() {
 						<form.AppField name="type">
 							{(field) => (
 								<field.SelectField
-									label="Название"
+									label="Тип столбца"
 									options={columnTypeOptions}
 								/>
 							)}
 						</form.AppField>
+						<form.Subscribe selector={(api) => api.values.type === "boolean"}>
+							{(isBooleanType) => {
+								return isBooleanType ? null : (
+									<form.AppField name="required">
+										{(field) => (
+											<field.CheckboxField label="Обязательное поле" />
+										)}
+									</form.AppField>
+								);
+							}}
+						</form.Subscribe>
 						<form.AppForm>
 							<form.SubscribeButton label="Создать" />
 						</form.AppForm>

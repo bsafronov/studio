@@ -93,6 +93,14 @@ function RouteComponent() {
 			return {
 				id,
 				header: name,
+				cell: ({
+					row: {
+						original: { data },
+					},
+				}) => {
+					const value = data[id];
+					return value;
+				},
 			} satisfies ColumnDef<SheetRow>;
 		});
 		return [...cols, ...baseColumns];
@@ -102,6 +110,7 @@ function RouteComponent() {
 		data: rows,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
+		columnResizeMode: "onChange",
 	});
 
 	return (

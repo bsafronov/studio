@@ -55,7 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<Toaster richColors />
 				<SidebarProvider>
 					<AppSidebar />
-					<div className="w-full flex flex-col bg-muted">
+					<div className="grow flex flex-col bg-muted overflow-x-hidden">
 						<AppBreadcrumb />
 						<main className="flex flex-col grow p-4 gap-4">{children}</main>
 					</div>
