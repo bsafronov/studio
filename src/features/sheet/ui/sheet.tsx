@@ -1,4 +1,9 @@
-import { flexRender, type Table as TTable } from "@tanstack/react-table";
+import {
+	type Column,
+	flexRender,
+	type Table as TTable,
+} from "@tanstack/react-table";
+import type { CSSProperties } from "react";
 import {
 	LuChevronDown,
 	LuChevronLeft,
@@ -33,6 +38,30 @@ type SheetProps<TData> = {
 	description?: string;
 };
 
+const getCommonPinningStyles = <TData,>(
+	column: Column<TData>,
+): CSSProperties => {
+	const isPinned = column.getIsPinned();
+	const isLastLeftPinnedColumn =
+		isPinned === "left" && column.getIsLastColumn("left");
+	const isFirstRightPinnedColumn =
+		isPinned === "right" && column.getIsFirstColumn("right");
+
+	return {
+		boxShadow: isLastLeftPinnedColumn
+			? "-4px 0 1px -4px var(--border) inset"
+			: isFirstRightPinnedColumn
+				? "4px 0 1px -4px var(--border) inset"
+				: undefined,
+		left: isPinned === "left" ? `${column.getStart("left")}px` : undefined,
+		right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
+		opacity: isPinned ? 0.95 : 1,
+		position: isPinned ? "sticky" : "relative",
+		width: column.getSize(),
+		zIndex: isPinned ? 1 : 0,
+	};
+};
+
 export function Sheet<TData>({ table }: SheetProps<TData>) {
 	return (
 		<div className="relative -m-4 grow flex flex-col overflow-hidden">
@@ -48,9 +77,7 @@ export function Sheet<TData>({ table }: SheetProps<TData>) {
 										"relative group",
 										header.column.getCanSort() && "cursor-pointer",
 									)}
-									style={{
-										width: header.getSize(),
-									}}
+									style={getCommonPinningStyles(header.column)}
 									onClick={header.column.getToggleSortingHandler()}
 								>
 									{header.isPlaceholder
@@ -88,9 +115,7 @@ export function Sheet<TData>({ table }: SheetProps<TData>) {
 							{row.getVisibleCells().map((cell) => (
 								<TableCell
 									key={cell.id}
-									style={{
-										width: cell.column.getSize(),
-									}}
+									style={getCommonPinningStyles(cell.column)}
 								>
 									{flexRender(cell.column.columnDef.cell, cell.getContext())}
 								</TableCell>
