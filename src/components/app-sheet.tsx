@@ -1,5 +1,5 @@
 import { flexRender, type Table as TTable } from "@tanstack/react-table";
-import { Card } from "./ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import {
 	Table,
 	TableBody,
@@ -11,11 +11,24 @@ import {
 
 type AppSheetProps<TData> = {
 	table: TTable<TData>;
+	title?: string;
+	description?: string;
 };
 
-export function AppSheet<TData>({ table }: AppSheetProps<TData>) {
+export function AppSheet<TData>({
+	table,
+	title,
+	description,
+}: AppSheetProps<TData>) {
+	const hasHeader = title || description;
 	return (
 		<Card>
+			{hasHeader && (
+				<CardHeader>
+					{title && <CardTitle>{title}</CardTitle>}
+					{description && <CardDescription>{description}</CardDescription>}
+				</CardHeader>
+			)}
 			<Table>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
