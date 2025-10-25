@@ -325,6 +325,24 @@ const getRows = baseProcedure
 		return rows;
 	});
 
+const getRowById = baseProcedure
+	.input(z.object({ rowId: z.string() }))
+	.handler(async ({ context, input }) => {
+		const row = await context.db.query.sheetRowsTable.findFirst({
+			where: eq(sheetRowsTable.id, input.rowId),
+			with: {
+				updatedBy: withSafeUser,
+				createdBy: withSafeUser,
+			},
+		});
+
+		if (!row) {
+			throw new ORPCError("NOT_FOUND");
+		}
+
+		return row;
+	});
+
 export const sheet = {
 	createSheet,
 	deleteSheet,
@@ -341,4 +359,5 @@ export const sheet = {
 	deleteRow,
 	updateRow,
 	getRows,
+	getRowById,
 };
