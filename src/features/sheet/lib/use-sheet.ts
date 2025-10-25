@@ -7,6 +7,7 @@ import {
 	getSortedRowModel,
 	type OnChangeFn,
 	type TableOptions,
+	type TableState,
 	useReactTable,
 } from "@tanstack/react-table";
 
@@ -16,7 +17,6 @@ type SheetState = {
 	limit: number;
 	page: number;
 };
-type UpdaterState = SheetState[keyof SheetState];
 
 type SheetOptions<TData> = Pick<TableOptions<TData>, "columns" | "data"> &
 	SheetState;
@@ -27,21 +27,31 @@ export function useSheet<TData>({
 	sorting,
 	columnFilters,
 	limit,
+	page,
 }: SheetOptions<TData>) {
 	const navigate = useNavigate();
 
-	const handleStateChange = <T extends UpdaterState>(
+	const state = {
+		columnFilters,
+		sorting,
+		pagination: {
+			pageIndex: Math.max(page - 1, 0),
+			pageSize: limit,
+		},
+	} satisfies Partial<TableState>;
+
+	const handleStateChange = <T extends (typeof state)[keyof typeof state]>(
 		state: T,
-		key: keyof SheetState,
+		searchFn: (state: T) => Partial<SheetState>,
 	) => {
 		const handler: OnChangeFn<T> = (updater) => {
 			const newState = typeof updater === "function" ? updater(state) : updater;
-
+			console.log({ newState });
 			navigate({
 				to: ".",
 				search: (prev) => ({
 					...prev,
-					[key]: newState,
+					...searchFn(newState),
 				}),
 			});
 		};
@@ -56,13 +66,25 @@ export function useSheet<TData>({
 		getFilteredRowModel: getFilteredRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		columnResizeMode: "onChange",
-		state: {
-			sorting,
-			columnFilters,
+		state,
+		initialState: {
+			columnPinning: {
+				right: ["actions"],
+			},
 		},
-		onSortingChange: handleStateChange(sorting, "sorting"),
-		onColumnFiltersChange: handleStateChange(columnFilters, "columnFilters"),
+		onSortingChange: handleStateChange(state.sorting, (sorting) => ({
+			sorting,
+		})),
+		onColumnFiltersChange: handleStateChange(
+			state.columnFilters,
+			(columnFilters) => ({ columnFilters }),
+		),
+		onPaginationChange: handleStateChange(state.pagination, (pagination) => ({
+			page: pagination.pageIndex + 1,
+			limit: pagination.pageSize,
+		})),
 		manualSorting: data.length >= limit,
 		manualFiltering: true,
+		manualPagination: true,
 	});
 }

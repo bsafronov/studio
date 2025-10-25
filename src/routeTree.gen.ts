@@ -8,6 +8,8 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SheetsIndexRouteImport } from './routes/sheets/index'
@@ -27,6 +29,13 @@ import { Route as SheetsSheetIdColumnsIndexRouteImport } from './routes/sheets/$
 import { Route as SheetsSheetIdColumnsNewRouteImport } from './routes/sheets/$sheetId/columns/new'
 import { Route as SheetsSheetIdColumnsColumnIdRouteImport } from './routes/sheets/$sheetId/columns/$columnId'
 
+const AuthRouteImport = createFileRoute('/auth')()
+
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -156,6 +165,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/$': typeof ApiSplatRoute
+  '/auth': typeof AuthRouteWithChildren
   '/auth/_auth': typeof AuthAuthRouteWithChildren
   '/sheets/new': typeof SheetsNewRoute
   '/admin/': typeof AdminIndexRoute
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/api/$'
+    | '/auth'
     | '/auth/_auth'
     | '/sheets/new'
     | '/admin/'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiSplatRoute: typeof ApiSplatRoute
+  AuthRoute: typeof AuthRouteWithChildren
   SheetsNewRoute: typeof SheetsNewRoute
   AdminIndexRoute: typeof AdminIndexRoute
   SheetsIndexRoute: typeof SheetsIndexRoute
@@ -251,6 +263,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -281,7 +300,7 @@ declare module '@tanstack/react-router' {
     }
     '/auth/_auth': {
       id: '/auth/_auth'
-      path: ''
+      path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthAuthRouteImport
       parentRoute: typeof AuthRoute
@@ -373,9 +392,34 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthAuthRouteChildren {
+  AuthAuthLoginRoute: typeof AuthAuthLoginRoute
+  AuthAuthRegisterRoute: typeof AuthAuthRegisterRoute
+}
+
+const AuthAuthRouteChildren: AuthAuthRouteChildren = {
+  AuthAuthLoginRoute: AuthAuthLoginRoute,
+  AuthAuthRegisterRoute: AuthAuthRegisterRoute,
+}
+
+const AuthAuthRouteWithChildren = AuthAuthRoute._addFileChildren(
+  AuthAuthRouteChildren,
+)
+
+interface AuthRouteChildren {
+  AuthAuthRoute: typeof AuthAuthRouteWithChildren
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthAuthRoute: AuthAuthRouteWithChildren,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiSplatRoute: ApiSplatRoute,
+  AuthRoute: AuthRouteWithChildren,
   SheetsNewRoute: SheetsNewRoute,
   AdminIndexRoute: AdminIndexRoute,
   SheetsIndexRoute: SheetsIndexRoute,

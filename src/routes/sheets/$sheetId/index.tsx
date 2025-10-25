@@ -1,5 +1,6 @@
 import {
 	useMutation,
+	useQuery,
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
@@ -29,7 +30,12 @@ import { orpc, type RouterOutputs } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/$sheetId/")({
 	component: RouteComponent,
-	loader: async ({ context: { queryClient }, params: { sheetId } }) => {
+	loaderDeps: ({ search }) => search,
+	loader: async ({
+		context: { queryClient },
+		params: { sheetId },
+		deps: { limit, page },
+	}) => {
 		await Promise.all([
 			queryClient.prefetchQuery(
 				orpc.sheet.sheet.queryOptions({
@@ -43,7 +49,7 @@ export const Route = createFileRoute("/sheets/$sheetId/")({
 			),
 			queryClient.prefetchQuery(
 				orpc.sheet.rowList.queryOptions({
-					input: { sheetId },
+					input: { sheetId, limit, page },
 				}),
 			),
 		]);
@@ -88,12 +94,13 @@ const baseColumns = [
 
 function ActionMenu(params: { sheetId: string; rowId: string }) {
 	const qc = useQueryClient();
+	const search = Route.useSearch();
 	const { mutateAsync: deleteRow } = useMutation(
 		orpc.sheet.deleteRow.mutationOptions({
 			onSuccess: () => {
 				qc.invalidateQueries({
 					queryKey: orpc.sheet.rowList.queryKey({
-						input: { sheetId: params.sheetId },
+						input: { sheetId: params.sheetId, ...search },
 					}),
 				});
 			},
@@ -135,14 +142,14 @@ function RouteComponent() {
 			input: { sheetId },
 		}),
 	);
-	const { data: dynamicColumns } = useSuspenseQuery(
+	const { data: dynamicColumns = [] } = useQuery(
 		orpc.sheet.columnList.queryOptions({
 			input: { sheetId },
 		}),
 	);
-	const { data: rows } = useSuspenseQuery(
+	const { data: rows = [] } = useQuery(
 		orpc.sheet.rowList.queryOptions({
-			input: { sheetId },
+			input: { sheetId, ...search },
 		}),
 	);
 

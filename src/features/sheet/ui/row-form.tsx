@@ -15,7 +15,7 @@ const sortFn = (a: SheetColumn, b: SheetColumn) => {
 	const typeA = a.type === "boolean";
 	const typeB = b.type === "boolean";
 	const booleanLast = +typeA - +typeB;
-	return requiredFirst + booleanLast;
+	return requiredFirst * 2 + booleanLast;
 };
 
 export function RowForm({ columns, defaultValues, onSubmit }: RowFormProps) {

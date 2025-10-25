@@ -1,11 +1,22 @@
 import { flexRender, type Table as TTable } from "@tanstack/react-table";
-import { LuChevronDown, LuChevronsUpDown, LuChevronUp } from "react-icons/lu";
 import {
-	Card,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+	LuChevronDown,
+	LuChevronLeft,
+	LuChevronRight,
+	LuChevronsLeft,
+	LuChevronsRight,
+	LuChevronsUpDown,
+	LuChevronUp,
+} from "react-icons/lu";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import {
 	Table,
 	TableBody,
@@ -22,18 +33,11 @@ type SheetProps<TData> = {
 	description?: string;
 };
 
-export function Sheet<TData>({ table, title, description }: SheetProps<TData>) {
-	const hasHeader = title || description;
+export function Sheet<TData>({ table }: SheetProps<TData>) {
 	return (
-		<Card>
-			{hasHeader && (
-				<CardHeader>
-					{title && <CardTitle>{title}</CardTitle>}
-					{description && <CardDescription>{description}</CardDescription>}
-				</CardHeader>
-			)}
+		<div className="relative -m-4 grow flex flex-col overflow-hidden">
 			<Table>
-				<TableHeader>
+				<TableHeader className="sticky top-0">
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header) => (
@@ -49,17 +53,17 @@ export function Sheet<TData>({ table, title, description }: SheetProps<TData>) {
 									}}
 									onClick={header.column.getToggleSortingHandler()}
 								>
-									{header.column.getCanSort() && (
-										<HeaderSortingIcon
-											direction={header.column.getIsSorted()}
-										/>
-									)}
 									{header.isPlaceholder
 										? null
 										: flexRender(
 												header.column.columnDef.header,
 												header.getContext(),
 											)}
+									{header.column.getCanSort() && (
+										<HeaderSortingIcon
+											direction={header.column.getIsSorted()}
+										/>
+									)}
 
 									{header.column.getCanResize() && (
 										// biome-ignore lint/a11y/noStaticElementInteractions: ignore
@@ -95,7 +99,65 @@ export function Sheet<TData>({ table, title, description }: SheetProps<TData>) {
 					))}
 				</TableBody>
 			</Table>
-		</Card>
+			<div className="flex justify-end px-4 gap-4 items-center sticky bottom-0 w-full">
+				<span>
+					Страница {table.getState().pagination.pageIndex + 1} из{" "}
+					{table.getPageCount().toLocaleString()}
+				</span>
+				<ButtonGroup>
+					<Button
+						size={"icon-sm"}
+						variant="outline"
+						onClick={table.firstPage}
+						disabled={!table.getCanPreviousPage()}
+					>
+						<LuChevronsLeft />
+					</Button>
+					<Button
+						size={"icon-sm"}
+						variant="outline"
+						onClick={table.previousPage}
+						disabled={!table.getCanPreviousPage()}
+					>
+						<LuChevronLeft />
+					</Button>
+					<Button
+						size={"icon-sm"}
+						variant="outline"
+						onClick={table.nextPage}
+						disabled={!table.getCanNextPage()}
+					>
+						<LuChevronRight />
+					</Button>
+					<Button
+						size={"icon-sm"}
+						variant="outline"
+						onClick={table.lastPage}
+						disabled={!table.getCanNextPage()}
+					>
+						<LuChevronsRight />
+					</Button>
+				</ButtonGroup>
+				<div className="flex items-center gap-1 p-4 sticky bottom-0">
+					Показывать по
+					<Select
+						value={table.getState().pagination.pageSize.toString()}
+						onValueChange={(value) => table.setPageSize(+value)}
+					>
+						<SelectTrigger>
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent align="end">
+							{[10, 20, 30, 40, 50].map((pageSize) => (
+								<SelectItem key={pageSize} value={pageSize.toString()}>
+									{pageSize}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				</div>
+			</div>
+		</div>
 	);
 }
 
@@ -113,8 +175,8 @@ const HeaderSortingIcon = ({
 	return (
 		<Icon
 			className={cn(
-				"inline mr-2 text-muted-foreground",
-				direction && "text-primary",
+				"inline ml-2 text-muted-foreground opacity-0 group-hover:opacity-100 transition-[opacity,color]",
+				direction && "text-primary opacity-100 ",
 			)}
 		/>
 	);
