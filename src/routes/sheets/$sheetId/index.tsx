@@ -64,7 +64,10 @@ const baseColumns = [
 		header: "Дата создания",
 		cell: ({ getValue }) => format(getValue(), "dd.MM.yyyy HH:mm"),
 	}),
-	th.accessor("updatedBy.username", { header: "Изменил" }),
+	th.accessor("updatedBy.username", {
+		header: "Изменил",
+		cell: ({ getValue }) => getValue() ?? null,
+	}),
 	th.accessor("updatedAt", {
 		header: "Дата изменения",
 		cell: ({ getValue }) => {
@@ -129,7 +132,7 @@ function RouteComponent() {
 					},
 				}) => {
 					const value = data[id];
-					return value;
+					return value ?? null;
 				},
 			} satisfies ColumnDef<SheetRow>;
 		});

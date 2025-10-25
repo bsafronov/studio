@@ -39,6 +39,7 @@ const columns = [
 	}),
 	th.accessor("updatedBy.username", {
 		header: "Изменил",
+		cell: ({ getValue }) => getValue() ?? null,
 	}),
 	th.accessor("updatedAt", {
 		header: "Дата изменения",
