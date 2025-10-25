@@ -1,5 +1,6 @@
 import { columnList } from "./column-list";
 import { createColumn } from "./create-column";
+import { createMockSheet } from "./create-mock-sheet";
 import { createRow } from "./create-row";
 import { createSheet } from "./create-sheet";
 import { deleteColumn } from "./delete-column";
@@ -30,4 +31,7 @@ export default {
 	createSheet,
 	deleteSheet,
 	updateSheet,
+
+	// DEV
+	createMockSheet,
 };

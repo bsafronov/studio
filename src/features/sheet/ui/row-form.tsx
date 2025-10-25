@@ -10,6 +10,14 @@ type RowFormProps = {
 	onSubmit: (data: Record<string, unknown>) => Promise<void>;
 };
 
+const sortFn = (a: SheetColumn, b: SheetColumn) => {
+	const requiredFirst = +b.required - +a.required;
+	const typeA = a.type === "boolean";
+	const typeB = b.type === "boolean";
+	const booleanLast = +typeA - +typeB;
+	return requiredFirst + booleanLast;
+};
+
 export function RowForm({ columns, defaultValues, onSubmit }: RowFormProps) {
 	const form = useAppForm({
 		defaultValues,
@@ -32,7 +40,7 @@ export function RowForm({ columns, defaultValues, onSubmit }: RowFormProps) {
 			<CardContent>
 				<Form onSubmit={form.handleSubmit}>
 					<FieldGroup>
-						{columns.map(({ type, id, name, required }) => {
+						{columns.sort(sortFn).map(({ type, id, name, required }) => {
 							const getSchema = () => {
 								if (!required) return;
 

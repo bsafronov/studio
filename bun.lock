@@ -4,7 +4,7 @@
     "": {
       "name": "studio",
       "dependencies": {
-        "@faker-js/faker": "^10.0.0",
+        "@faker-js/faker": "^10.1.0",
         "@neondatabase/serverless": "^1.0.2",
         "@neondatabase/vite-plugin-postgres": "^0.2.0",
         "@netlify/vite-plugin-tanstack-start": "^1.0.2",
