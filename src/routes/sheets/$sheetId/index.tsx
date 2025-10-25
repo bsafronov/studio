@@ -9,7 +9,13 @@ import {
 import { format } from "date-fns";
 import { LucideSettings2 } from "lucide-react";
 import { useMemo } from "react";
-import { LuColumns2, LuLogs, LuPencil, LuSettings } from "react-icons/lu";
+import {
+	LuColumns2,
+	LuEllipsis,
+	LuLogs,
+	LuPencil,
+	LuSettings,
+} from "react-icons/lu";
 import z from "zod";
 import { AppSheet } from "@/components/app-sheet";
 import { Button } from "@/components/ui/button";
@@ -66,6 +72,30 @@ const baseColumns = [
 			if (!updatedAt) return;
 			return format(updatedAt, "dd.MM.yyyy HH:mm");
 		},
+	}),
+	th.display({
+		id: "actions",
+		cell: ({
+			row: {
+				original: { id, sheetId },
+			},
+		}) => (
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button size="icon-sm" variant="ghost">
+						<LuEllipsis />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent align="end">
+					<DropdownMenuItem asChild>
+						<Link to="/sheets/$sheetId/$rowId" params={{ sheetId, rowId: id }}>
+							Изменить
+						</Link>
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
+		),
+		size: 40,
 	}),
 ];
 
