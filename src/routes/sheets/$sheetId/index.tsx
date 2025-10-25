@@ -4,12 +4,7 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-	type ColumnDef,
-	createColumnHelper,
-	getCoreRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { LucideSettings2 } from "lucide-react";
 import { useMemo } from "react";
@@ -30,6 +25,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { confirmDialog } from "@/features/alert-dialog";
+import { SheetSearchSchema, useSheet } from "@/features/sheet";
 import { orpc, type RouterOutputs } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/$sheetId/")({
@@ -55,8 +51,7 @@ export const Route = createFileRoute("/sheets/$sheetId/")({
 	},
 	validateSearch: z.object({
 		redirectUrl: z.string().optional(),
-		page: z.number().optional().catch(1),
-		limit: z.number().optional().catch(20),
+		...SheetSearchSchema.shape,
 	}),
 });
 
@@ -134,6 +129,7 @@ function ActionMenu(params: { sheetId: string; rowId: string }) {
 }
 
 function RouteComponent() {
+	const search = Route.useSearch();
 	const { sheetId } = Route.useParams();
 	const { data: sheet } = useSuspenseQuery(
 		orpc.sheet.sheet.queryOptions({
@@ -156,6 +152,7 @@ function RouteComponent() {
 			const { id, name } = column;
 			return {
 				id,
+				accessorFn: ({ data }) => data[id],
 				header: name,
 				cell: ({
 					row: {
@@ -170,11 +167,10 @@ function RouteComponent() {
 		return [...cols, ...baseColumns];
 	}, [dynamicColumns]);
 
-	const table = useReactTable({
-		data: rows,
+	const table = useSheet({
 		columns,
-		getCoreRowModel: getCoreRowModel(),
-		columnResizeMode: "onChange",
+		data: rows,
+		...search,
 	});
 
 	return (

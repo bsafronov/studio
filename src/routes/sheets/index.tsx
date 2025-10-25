@@ -1,12 +1,9 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-	createColumnHelper,
-	getCoreRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { AppSheet } from "@/components/app-sheet";
+import { SheetSearchSchema, useSheet } from "@/features/sheet";
 import { orpc, type RouterOutputs } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/")({
@@ -14,6 +11,7 @@ export const Route = createFileRoute("/sheets/")({
 	loader: ({ context }) => {
 		context.queryClient.prefetchQuery(orpc.sheet.sheetList.queryOptions());
 	},
+	validateSearch: SheetSearchSchema,
 });
 
 const th = createColumnHelper<RouterOutputs["sheet"]["sheetList"][number]>();
@@ -52,14 +50,13 @@ const columns = [
 ];
 
 function RouteComponent() {
-	const { data: sheets } = useSuspenseQuery(
-		orpc.sheet.sheetList.queryOptions(),
-	);
+	const search = Route.useSearch();
+	const { data } = useSuspenseQuery(orpc.sheet.sheetList.queryOptions());
 
-	const table = useReactTable({
-		data: sheets,
+	const table = useSheet({
+		data,
 		columns,
-		getCoreRowModel: getCoreRowModel(),
+		...search,
 	});
 
 	return <AppSheet table={table} />;

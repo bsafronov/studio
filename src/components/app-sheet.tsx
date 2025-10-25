@@ -1,4 +1,5 @@
 import { flexRender, type Table as TTable } from "@tanstack/react-table";
+import { LuChevronDown, LuChevronsUpDown, LuChevronUp } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import {
@@ -38,17 +39,27 @@ export function AppSheet<TData>({
 								<TableHead
 									key={header.id}
 									colSpan={header.colSpan}
-									className="relative group"
+									className={cn(
+										"relative group",
+										header.column.getCanSort() && "cursor-pointer",
+									)}
 									style={{
 										width: header.getSize(),
 									}}
+									onClick={header.column.getToggleSortingHandler()}
 								>
+									{header.column.getCanSort() && (
+										<HeaderSortingIcon
+											direction={header.column.getIsSorted()}
+										/>
+									)}
 									{header.isPlaceholder
 										? null
 										: flexRender(
 												header.column.columnDef.header,
 												header.getContext(),
 											)}
+
 									{header.column.getCanResize() && (
 										// biome-ignore lint/a11y/noStaticElementInteractions: ignore
 										<div
@@ -86,3 +97,24 @@ export function AppSheet<TData>({
 		</Card>
 	);
 }
+
+const HeaderSortingIcon = ({
+	direction,
+}: {
+	direction: "asc" | "desc" | false;
+}) => {
+	const Icon = !direction
+		? LuChevronsUpDown
+		: direction === "asc"
+			? LuChevronUp
+			: LuChevronDown;
+
+	return (
+		<Icon
+			className={cn(
+				"inline mr-2 text-muted-foreground",
+				direction && "text-primary",
+			)}
+		/>
+	);
+};
