@@ -11,6 +11,7 @@ import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { AlertDialogProvider } from "@/features/alert-dialog";
 import type { orpc } from "@/orpc/client";
 import appCss from "../styles.css?url";
 
@@ -53,6 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				<Toaster richColors />
+				<AlertDialogProvider />
 				<SidebarProvider>
 					<AppSidebar />
 					<div className="grow flex flex-col bg-muted overflow-x-hidden">

@@ -1,4 +1,8 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+	useMutation,
+	useQueryClient,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
 	type ColumnDef,
@@ -25,6 +29,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { confirmDialog } from "@/features/alert-dialog";
 import { orpc, type RouterOutputs } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/$sheetId/")({
@@ -82,25 +87,51 @@ const baseColumns = [
 			row: {
 				original: { id, sheetId },
 			},
-		}) => (
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button size="icon-sm" variant="ghost">
-						<LuEllipsis />
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end">
-					<DropdownMenuItem asChild>
-						<Link to="/sheets/$sheetId/$rowId" params={{ sheetId, rowId: id }}>
-							Изменить
-						</Link>
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-		),
+		}) => <ActionMenu rowId={id} sheetId={sheetId} />,
 		size: 40,
 	}),
 ];
+
+function ActionMenu(params: { sheetId: string; rowId: string }) {
+	const qc = useQueryClient();
+	const { mutateAsync: deleteRow } = useMutation(
+		orpc.sheet.deleteRow.mutationOptions({
+			onSuccess: () => {
+				qc.invalidateQueries({
+					queryKey: orpc.sheet.rowList.queryKey({
+						input: { sheetId: params.sheetId },
+					}),
+				});
+			},
+		}),
+	);
+
+	const handleDelete = () => {
+		confirmDialog({
+			onConfirm: () => deleteRow({ rowId: params.rowId }),
+		});
+	};
+
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button size="icon-sm" variant="ghost">
+					<LuEllipsis />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end">
+				<DropdownMenuItem asChild>
+					<Link to="/sheets/$sheetId/$rowId" params={params}>
+						Изменить
+					</Link>
+				</DropdownMenuItem>
+				<DropdownMenuItem onClick={handleDelete} variant="destructive">
+					Удалить
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
+}
 
 function RouteComponent() {
 	const { sheetId } = Route.useParams();
