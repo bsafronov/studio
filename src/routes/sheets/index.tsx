@@ -2,8 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { AppSheet } from "@/components/app-sheet";
-import { SheetSearchSchema, useSheet } from "@/features/sheet";
+import { Sheet, SheetSearchSchema, useSheet } from "@/features/sheet";
 import { orpc, type RouterOutputs } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/")({
@@ -59,5 +58,5 @@ function RouteComponent() {
 		...search,
 	});
 
-	return <AppSheet table={table} />;
+	return <Sheet table={table} />;
 }

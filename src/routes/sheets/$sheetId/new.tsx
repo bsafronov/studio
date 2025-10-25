@@ -4,7 +4,7 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { RowForm } from "@/features/sheet/ui/row-form";
+import { RowForm } from "@/features/sheet";
 import { orpc } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/$sheetId/new")({

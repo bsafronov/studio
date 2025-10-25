@@ -1,7 +1,11 @@
 import { flexRender, type Table as TTable } from "@tanstack/react-table";
 import { LuChevronDown, LuChevronsUpDown, LuChevronUp } from "react-icons/lu";
-import { cn } from "@/lib/utils";
-import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+	Card,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Table,
 	TableBody,
@@ -9,19 +13,16 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from "./ui/table";
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
-type AppSheetProps<TData> = {
+type SheetProps<TData> = {
 	table: TTable<TData>;
 	title?: string;
 	description?: string;
 };
 
-export function AppSheet<TData>({
-	table,
-	title,
-	description,
-}: AppSheetProps<TData>) {
+export function Sheet<TData>({ table, title, description }: SheetProps<TData>) {
 	const hasHeader = title || description;
 	return (
 		<Card>

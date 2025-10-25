@@ -16,7 +16,6 @@ import {
 	LuSettings,
 } from "react-icons/lu";
 import z from "zod";
-import { AppSheet } from "@/components/app-sheet";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -25,7 +24,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { confirmDialog } from "@/features/alert-dialog";
-import { SheetSearchSchema, useSheet } from "@/features/sheet";
+import { Sheet, SheetSearchSchema, useSheet } from "@/features/sheet";
 import { orpc, type RouterOutputs } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/$sheetId/")({
@@ -219,7 +218,7 @@ function RouteComponent() {
 					</DropdownMenu>
 				</div>
 			</div>
-			<AppSheet table={table} />
+			<Sheet table={table} />
 		</>
 	);
 }
