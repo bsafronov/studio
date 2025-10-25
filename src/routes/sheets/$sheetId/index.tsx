@@ -19,7 +19,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Section } from "@/components/ui/section";
 import { orpc, type RouterOutputs } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/$sheetId/")({
@@ -106,9 +105,9 @@ function RouteComponent() {
 	});
 
 	return (
-		<Section>
-			{sheet.name}
-			<div className="flex justify-end">
+		<>
+			<div className="flex justify-between items-center">
+				<h5 className="font-semibold text-xl">{sheet.name}</h5>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button size="icon">
@@ -150,6 +149,6 @@ function RouteComponent() {
 				</DropdownMenu>
 			</div>
 			<AppSheet table={table} />
-		</Section>
+		</>
 	);
 }

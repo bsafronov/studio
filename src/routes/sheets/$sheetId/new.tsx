@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Section } from "@/components/ui/section";
 import { orpc } from "@/orpc/client";
 
 export const Route = createFileRoute("/sheets/$sheetId/new")({
@@ -18,5 +17,5 @@ function RouteComponent() {
 		orpc.sheet.getColumns.queryOptions({ input: { sheetId } }),
 	);
 
-	return <Section>New record form</Section>;
+	return "New record form";
 }

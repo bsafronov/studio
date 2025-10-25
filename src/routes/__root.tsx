@@ -55,10 +55,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<Toaster richColors />
 				<SidebarProvider>
 					<AppSidebar />
-					<main className="w-full flex flex-col bg-muted">
+					<div className="w-full flex flex-col bg-muted">
 						<AppBreadcrumb />
-						{children}
-					</main>
+						<main className="flex flex-col grow p-4 gap-4">{children}</main>
+					</div>
 				</SidebarProvider>
 				<TanStackDevtools
 					config={{

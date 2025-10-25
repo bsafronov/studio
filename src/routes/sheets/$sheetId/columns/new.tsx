@@ -4,7 +4,6 @@ import z from "zod";
 import { Form, useAppForm } from "@/components/app-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
-import { Section } from "@/components/ui/section";
 import type { sheetColumnType } from "@/db/schema";
 import { orpc } from "@/orpc/client";
 
@@ -57,34 +56,32 @@ function RouteComponent() {
 	});
 
 	return (
-		<Section>
-			<Card>
-				<CardContent>
-					<Form onSubmit={form.handleSubmit}>
-						<FieldGroup>
-							<form.AppField
-								name="name"
-								validators={{
-									onBlur: z.string().min(1, "Название не может быть пустым"),
-								}}
-							>
-								{(field) => <field.TextField label="Название" />}
-							</form.AppField>
-							<form.AppField name="type">
-								{(field) => (
-									<field.SelectField
-										label="Название"
-										options={columnTypeOptions}
-									/>
-								)}
-							</form.AppField>
-							<form.AppForm>
-								<form.SubscribeButton label="Создать" />
-							</form.AppForm>
-						</FieldGroup>
-					</Form>
-				</CardContent>
-			</Card>
-		</Section>
+		<Card>
+			<CardContent>
+				<Form onSubmit={form.handleSubmit}>
+					<FieldGroup>
+						<form.AppField
+							name="name"
+							validators={{
+								onBlur: z.string().min(1, "Название не может быть пустым"),
+							}}
+						>
+							{(field) => <field.TextField label="Название" />}
+						</form.AppField>
+						<form.AppField name="type">
+							{(field) => (
+								<field.SelectField
+									label="Название"
+									options={columnTypeOptions}
+								/>
+							)}
+						</form.AppField>
+						<form.AppForm>
+							<form.SubscribeButton label="Создать" />
+						</form.AppForm>
+					</FieldGroup>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }

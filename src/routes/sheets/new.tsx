@@ -42,7 +42,7 @@ function RouteComponent() {
 	});
 
 	return (
-		<Form className="p-4" onSubmit={form.handleSubmit}>
+		<Form onSubmit={form.handleSubmit}>
 			<Card>
 				<CardHeader>
 					<CardTitle>Новая таблица</CardTitle>

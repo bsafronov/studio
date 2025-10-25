@@ -61,9 +61,5 @@ function RouteComponent() {
 		getCoreRowModel: getCoreRowModel(),
 	});
 
-	return (
-		<div className="p-4">
-			<AppSheet table={table} />
-		</div>
-	);
+	return <AppSheet table={table} />;
 }
