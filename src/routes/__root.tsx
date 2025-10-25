@@ -11,10 +11,12 @@ import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import type { orpc } from "@/orpc/client";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
+	orpc: typeof orpc;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

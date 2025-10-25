@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { toast } from "sonner";
+import { orpc } from "./orpc/client";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
@@ -21,7 +22,7 @@ export const getRouter = () => {
 
 	const router = createRouter({
 		routeTree,
-		context: { queryClient },
+		context: { queryClient, orpc },
 		defaultPreload: "intent",
 		Wrap: (props: { children: React.ReactNode }) => {
 			return (

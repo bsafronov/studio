@@ -20,13 +20,13 @@ import { Route as SheetsSheetIdIndexRouteImport } from './routes/sheets/$sheetId
 import { Route as SheetsSheetIdSettingsRouteImport } from './routes/sheets/$sheetId/settings'
 import { Route as SheetsSheetIdNewRouteImport } from './routes/sheets/$sheetId/new'
 import { Route as SheetsSheetIdLogsRouteImport } from './routes/sheets/$sheetId/logs'
-import { Route as SheetsSheetIdColumnsRouteImport } from './routes/sheets/$sheetId/columns'
+import { Route as SheetsSheetIdRowIdRouteImport } from './routes/sheets/$sheetId/$rowId'
 import { Route as AuthAuthRegisterRouteImport } from './routes/auth/_auth.register'
 import { Route as AuthAuthLoginRouteImport } from './routes/auth/_auth.login'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
-import { Route as SheetsSheetIdColumnsNewRouteImport } from './routes/sheets/$sheetId/columns.new'
-import { Route as SheetsSheetIdColumnsRowIdRouteImport } from './routes/sheets/$sheetId/columns.$rowId'
-import { Route as SheetsSheetIdColumnsColumnIdRouteImport } from './routes/sheets/$sheetId/columns.$columnId'
+import { Route as SheetsSheetIdColumnsIndexRouteImport } from './routes/sheets/$sheetId/columns/index'
+import { Route as SheetsSheetIdColumnsNewRouteImport } from './routes/sheets/$sheetId/columns/new'
+import { Route as SheetsSheetIdColumnsColumnIdRouteImport } from './routes/sheets/$sheetId/columns/$columnId'
 
 const AuthRouteImport = createFileRoute('/auth')()
 
@@ -79,9 +79,9 @@ const SheetsSheetIdLogsRoute = SheetsSheetIdLogsRouteImport.update({
   path: '/sheets/$sheetId/logs',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SheetsSheetIdColumnsRoute = SheetsSheetIdColumnsRouteImport.update({
-  id: '/sheets/$sheetId/columns',
-  path: '/sheets/$sheetId/columns',
+const SheetsSheetIdRowIdRoute = SheetsSheetIdRowIdRouteImport.update({
+  id: '/sheets/$sheetId/$rowId',
+  path: '/sheets/$sheetId/$rowId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAuthRegisterRoute = AuthAuthRegisterRouteImport.update({
@@ -99,22 +99,22 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SheetsSheetIdColumnsNewRoute = SheetsSheetIdColumnsNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => SheetsSheetIdColumnsRoute,
-} as any)
-const SheetsSheetIdColumnsRowIdRoute =
-  SheetsSheetIdColumnsRowIdRouteImport.update({
-    id: '/$rowId',
-    path: '/$rowId',
-    getParentRoute: () => SheetsSheetIdColumnsRoute,
+const SheetsSheetIdColumnsIndexRoute =
+  SheetsSheetIdColumnsIndexRouteImport.update({
+    id: '/sheets/$sheetId/columns/',
+    path: '/sheets/$sheetId/columns/',
+    getParentRoute: () => rootRouteImport,
   } as any)
+const SheetsSheetIdColumnsNewRoute = SheetsSheetIdColumnsNewRouteImport.update({
+  id: '/sheets/$sheetId/columns/new',
+  path: '/sheets/$sheetId/columns/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SheetsSheetIdColumnsColumnIdRoute =
   SheetsSheetIdColumnsColumnIdRouteImport.update({
-    id: '/$columnId',
-    path: '/$columnId',
-    getParentRoute: () => SheetsSheetIdColumnsRoute,
+    id: '/sheets/$sheetId/columns/$columnId',
+    path: '/sheets/$sheetId/columns/$columnId',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -126,14 +126,14 @@ export interface FileRoutesByFullPath {
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
-  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsRouteWithChildren
+  '/sheets/$sheetId/$rowId': typeof SheetsSheetIdRowIdRoute
   '/sheets/$sheetId/logs': typeof SheetsSheetIdLogsRoute
   '/sheets/$sheetId/new': typeof SheetsSheetIdNewRoute
   '/sheets/$sheetId/settings': typeof SheetsSheetIdSettingsRoute
   '/sheets/$sheetId': typeof SheetsSheetIdIndexRoute
   '/sheets/$sheetId/columns/$columnId': typeof SheetsSheetIdColumnsColumnIdRoute
-  '/sheets/$sheetId/columns/$rowId': typeof SheetsSheetIdColumnsRowIdRoute
   '/sheets/$sheetId/columns/new': typeof SheetsSheetIdColumnsNewRoute
+  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -144,14 +144,14 @@ export interface FileRoutesByTo {
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
-  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsRouteWithChildren
+  '/sheets/$sheetId/$rowId': typeof SheetsSheetIdRowIdRoute
   '/sheets/$sheetId/logs': typeof SheetsSheetIdLogsRoute
   '/sheets/$sheetId/new': typeof SheetsSheetIdNewRoute
   '/sheets/$sheetId/settings': typeof SheetsSheetIdSettingsRoute
   '/sheets/$sheetId': typeof SheetsSheetIdIndexRoute
   '/sheets/$sheetId/columns/$columnId': typeof SheetsSheetIdColumnsColumnIdRoute
-  '/sheets/$sheetId/columns/$rowId': typeof SheetsSheetIdColumnsRowIdRoute
   '/sheets/$sheetId/columns/new': typeof SheetsSheetIdColumnsNewRoute
+  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -164,14 +164,14 @@ export interface FileRoutesById {
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/auth/_auth/login': typeof AuthAuthLoginRoute
   '/auth/_auth/register': typeof AuthAuthRegisterRoute
-  '/sheets/$sheetId/columns': typeof SheetsSheetIdColumnsRouteWithChildren
+  '/sheets/$sheetId/$rowId': typeof SheetsSheetIdRowIdRoute
   '/sheets/$sheetId/logs': typeof SheetsSheetIdLogsRoute
   '/sheets/$sheetId/new': typeof SheetsSheetIdNewRoute
   '/sheets/$sheetId/settings': typeof SheetsSheetIdSettingsRoute
   '/sheets/$sheetId/': typeof SheetsSheetIdIndexRoute
   '/sheets/$sheetId/columns/$columnId': typeof SheetsSheetIdColumnsColumnIdRoute
-  '/sheets/$sheetId/columns/$rowId': typeof SheetsSheetIdColumnsRowIdRoute
   '/sheets/$sheetId/columns/new': typeof SheetsSheetIdColumnsNewRoute
+  '/sheets/$sheetId/columns/': typeof SheetsSheetIdColumnsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -184,14 +184,14 @@ export interface FileRouteTypes {
     | '/api/rpc/$'
     | '/auth/login'
     | '/auth/register'
-    | '/sheets/$sheetId/columns'
+    | '/sheets/$sheetId/$rowId'
     | '/sheets/$sheetId/logs'
     | '/sheets/$sheetId/new'
     | '/sheets/$sheetId/settings'
     | '/sheets/$sheetId'
     | '/sheets/$sheetId/columns/$columnId'
-    | '/sheets/$sheetId/columns/$rowId'
     | '/sheets/$sheetId/columns/new'
+    | '/sheets/$sheetId/columns'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -202,14 +202,14 @@ export interface FileRouteTypes {
     | '/api/rpc/$'
     | '/auth/login'
     | '/auth/register'
-    | '/sheets/$sheetId/columns'
+    | '/sheets/$sheetId/$rowId'
     | '/sheets/$sheetId/logs'
     | '/sheets/$sheetId/new'
     | '/sheets/$sheetId/settings'
     | '/sheets/$sheetId'
     | '/sheets/$sheetId/columns/$columnId'
-    | '/sheets/$sheetId/columns/$rowId'
     | '/sheets/$sheetId/columns/new'
+    | '/sheets/$sheetId/columns'
   id:
     | '__root__'
     | '/'
@@ -221,14 +221,14 @@ export interface FileRouteTypes {
     | '/api/rpc/$'
     | '/auth/_auth/login'
     | '/auth/_auth/register'
-    | '/sheets/$sheetId/columns'
+    | '/sheets/$sheetId/$rowId'
     | '/sheets/$sheetId/logs'
     | '/sheets/$sheetId/new'
     | '/sheets/$sheetId/settings'
     | '/sheets/$sheetId/'
     | '/sheets/$sheetId/columns/$columnId'
-    | '/sheets/$sheetId/columns/$rowId'
     | '/sheets/$sheetId/columns/new'
+    | '/sheets/$sheetId/columns/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -238,11 +238,14 @@ export interface RootRouteChildren {
   SheetsNewRoute: typeof SheetsNewRoute
   SheetsIndexRoute: typeof SheetsIndexRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
-  SheetsSheetIdColumnsRoute: typeof SheetsSheetIdColumnsRouteWithChildren
+  SheetsSheetIdRowIdRoute: typeof SheetsSheetIdRowIdRoute
   SheetsSheetIdLogsRoute: typeof SheetsSheetIdLogsRoute
   SheetsSheetIdNewRoute: typeof SheetsSheetIdNewRoute
   SheetsSheetIdSettingsRoute: typeof SheetsSheetIdSettingsRoute
   SheetsSheetIdIndexRoute: typeof SheetsSheetIdIndexRoute
+  SheetsSheetIdColumnsColumnIdRoute: typeof SheetsSheetIdColumnsColumnIdRoute
+  SheetsSheetIdColumnsNewRoute: typeof SheetsSheetIdColumnsNewRoute
+  SheetsSheetIdColumnsIndexRoute: typeof SheetsSheetIdColumnsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -317,11 +320,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SheetsSheetIdLogsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sheets/$sheetId/columns': {
-      id: '/sheets/$sheetId/columns'
-      path: '/sheets/$sheetId/columns'
-      fullPath: '/sheets/$sheetId/columns'
-      preLoaderRoute: typeof SheetsSheetIdColumnsRouteImport
+    '/sheets/$sheetId/$rowId': {
+      id: '/sheets/$sheetId/$rowId'
+      path: '/sheets/$sheetId/$rowId'
+      fullPath: '/sheets/$sheetId/$rowId'
+      preLoaderRoute: typeof SheetsSheetIdRowIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/_auth/register': {
@@ -345,26 +348,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sheets/$sheetId/columns/': {
+      id: '/sheets/$sheetId/columns/'
+      path: '/sheets/$sheetId/columns'
+      fullPath: '/sheets/$sheetId/columns'
+      preLoaderRoute: typeof SheetsSheetIdColumnsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sheets/$sheetId/columns/new': {
       id: '/sheets/$sheetId/columns/new'
-      path: '/new'
+      path: '/sheets/$sheetId/columns/new'
       fullPath: '/sheets/$sheetId/columns/new'
       preLoaderRoute: typeof SheetsSheetIdColumnsNewRouteImport
-      parentRoute: typeof SheetsSheetIdColumnsRoute
-    }
-    '/sheets/$sheetId/columns/$rowId': {
-      id: '/sheets/$sheetId/columns/$rowId'
-      path: '/$rowId'
-      fullPath: '/sheets/$sheetId/columns/$rowId'
-      preLoaderRoute: typeof SheetsSheetIdColumnsRowIdRouteImport
-      parentRoute: typeof SheetsSheetIdColumnsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/sheets/$sheetId/columns/$columnId': {
       id: '/sheets/$sheetId/columns/$columnId'
-      path: '/$columnId'
+      path: '/sheets/$sheetId/columns/$columnId'
       fullPath: '/sheets/$sheetId/columns/$columnId'
       preLoaderRoute: typeof SheetsSheetIdColumnsColumnIdRouteImport
-      parentRoute: typeof SheetsSheetIdColumnsRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -393,21 +396,6 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
-interface SheetsSheetIdColumnsRouteChildren {
-  SheetsSheetIdColumnsColumnIdRoute: typeof SheetsSheetIdColumnsColumnIdRoute
-  SheetsSheetIdColumnsRowIdRoute: typeof SheetsSheetIdColumnsRowIdRoute
-  SheetsSheetIdColumnsNewRoute: typeof SheetsSheetIdColumnsNewRoute
-}
-
-const SheetsSheetIdColumnsRouteChildren: SheetsSheetIdColumnsRouteChildren = {
-  SheetsSheetIdColumnsColumnIdRoute: SheetsSheetIdColumnsColumnIdRoute,
-  SheetsSheetIdColumnsRowIdRoute: SheetsSheetIdColumnsRowIdRoute,
-  SheetsSheetIdColumnsNewRoute: SheetsSheetIdColumnsNewRoute,
-}
-
-const SheetsSheetIdColumnsRouteWithChildren =
-  SheetsSheetIdColumnsRoute._addFileChildren(SheetsSheetIdColumnsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiSplatRoute: ApiSplatRoute,
@@ -415,11 +403,14 @@ const rootRouteChildren: RootRouteChildren = {
   SheetsNewRoute: SheetsNewRoute,
   SheetsIndexRoute: SheetsIndexRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
-  SheetsSheetIdColumnsRoute: SheetsSheetIdColumnsRouteWithChildren,
+  SheetsSheetIdRowIdRoute: SheetsSheetIdRowIdRoute,
   SheetsSheetIdLogsRoute: SheetsSheetIdLogsRoute,
   SheetsSheetIdNewRoute: SheetsSheetIdNewRoute,
   SheetsSheetIdSettingsRoute: SheetsSheetIdSettingsRoute,
   SheetsSheetIdIndexRoute: SheetsSheetIdIndexRoute,
+  SheetsSheetIdColumnsColumnIdRoute: SheetsSheetIdColumnsColumnIdRoute,
+  SheetsSheetIdColumnsNewRoute: SheetsSheetIdColumnsNewRoute,
+  SheetsSheetIdColumnsIndexRoute: SheetsSheetIdColumnsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

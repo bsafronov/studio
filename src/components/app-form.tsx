@@ -10,6 +10,13 @@ import {
 	InputGroupButton,
 	InputGroupInput,
 } from "./ui/input-group";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "./ui/select";
 import { Spinner } from "./ui/spinner";
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
@@ -22,6 +29,7 @@ export const { useAppForm } = createFormHook({
 		TextField,
 		NumberField,
 		PasswordField,
+		SelectField,
 	},
 	formComponents: {
 		SubscribeButton,
@@ -111,6 +119,43 @@ function NumberField({ label, description }: FieldProps) {
 				onChange={(e) => field.handleChange(parseInt(e.target.value, 10))}
 				onBlur={field.handleBlur}
 			/>
+			<FieldDescription>{description}</FieldDescription>
+			<FieldError errors={field.state.meta.errors} />
+		</Field>
+	);
+}
+
+type SelectOption = {
+	value: string;
+	label: React.ReactNode;
+};
+
+type SelectFieldProps = FieldProps & {
+	options: SelectOption[];
+};
+
+function SelectField({ label, description, options }: SelectFieldProps) {
+	const field = useFieldContext<string>();
+	const id = useId();
+	return (
+		<Field>
+			<FieldLabel htmlFor={id}>{label}</FieldLabel>
+			<Select
+				value={field.state.value}
+				name={field.name}
+				onValueChange={field.handleChange}
+			>
+				<SelectTrigger>
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent>
+					{options.map((option, idx) => (
+						<SelectItem value={option.value} key={idx.toString()}>
+							{option.label}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
 			<FieldDescription>{description}</FieldDescription>
 			<FieldError errors={field.state.meta.errors} />
 		</Field>
