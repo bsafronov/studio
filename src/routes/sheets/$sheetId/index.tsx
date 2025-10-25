@@ -181,45 +181,47 @@ function RouteComponent() {
 		<>
 			<div className="flex justify-between items-center">
 				<h5 className="font-semibold text-xl">{sheet.name}</h5>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button size="icon">
-							<LucideSettings2 />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuItem asChild>
-							<Link to="/sheets/$sheetId/new" params={{ sheetId }}>
-								<LuPencil />
-								Добавить запись
-							</Link>
-						</DropdownMenuItem>
-						<DropdownMenuItem asChild>
-							<Link to="/sheets/$sheetId/columns/new" params={{ sheetId }}>
-								<LuColumns2 />
-								Добавить столбец
-							</Link>
-						</DropdownMenuItem>
-						<DropdownMenuItem asChild>
-							<Link to="/sheets/$sheetId/columns" params={{ sheetId }}>
-								<LuColumns2 />
-								Столбцы
-							</Link>
-						</DropdownMenuItem>
-						<DropdownMenuItem asChild>
-							<Link to="/sheets/$sheetId/logs" params={{ sheetId }}>
-								<LuLogs />
-								Логи
-							</Link>
-						</DropdownMenuItem>
-						<DropdownMenuItem asChild>
-							<Link to="/sheets/$sheetId/settings" params={{ sheetId }}>
-								<LuSettings />
-								Настройки
-							</Link>
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<div className="flex items-center gap-2">
+					<Button asChild size="icon">
+						<Link to="/sheets/$sheetId/new" params={{ sheetId }}>
+							<LuPencil />
+						</Link>
+					</Button>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button size="icon" variant="ghost">
+								<LucideSettings2 />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							<DropdownMenuItem asChild></DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link to="/sheets/$sheetId/columns/new" params={{ sheetId }}>
+									<LuColumns2 />
+									Добавить столбец
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link to="/sheets/$sheetId/columns" params={{ sheetId }}>
+									<LuColumns2 />
+									Столбцы
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link to="/sheets/$sheetId/logs" params={{ sheetId }}>
+									<LuLogs />
+									Логи
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link to="/sheets/$sheetId/settings" params={{ sheetId }}>
+									<LuSettings />
+									Настройки
+								</Link>
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
 			</div>
 			<AppSheet table={table} />
 		</>

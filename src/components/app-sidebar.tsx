@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import { LucidePlus, LucideTable2 } from "lucide-react";
 import { useUser } from "@/features/auth/use-user";
+import { ModeToggle } from "@/features/theme/mode-toggle";
 import { orpc } from "@/orpc/client";
 import { Button } from "./ui/button";
 import {
@@ -47,6 +48,7 @@ export function AppSidebar() {
 			</SidebarContent>
 			<SidebarFooter>
 				{user?.username}
+				<ModeToggle />
 				<LoginLink />
 			</SidebarFooter>
 		</Sidebar>

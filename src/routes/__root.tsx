@@ -12,6 +12,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { AlertDialogProvider } from "@/features/alert-dialog";
+import { ThemeProvider } from "@/features/theme/theme-provider";
 import type { orpc } from "@/orpc/client";
 import appCss from "../styles.css?url";
 
@@ -48,20 +49,28 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		<html lang="ru" suppressHydrationWarning>
 			<head>
 				<HeadContent />
 			</head>
 			<body>
-				<Toaster richColors />
-				<AlertDialogProvider />
-				<SidebarProvider>
-					<AppSidebar />
-					<div className="grow flex flex-col bg-muted overflow-x-hidden">
-						<AppBreadcrumb />
-						<main className="flex flex-col grow p-4 gap-4">{children}</main>
-					</div>
-				</SidebarProvider>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<Toaster richColors />
+					<AlertDialogProvider />
+					<SidebarProvider>
+						<AppSidebar />
+						<div className="grow flex flex-col overflow-x-hidden">
+							<AppBreadcrumb />
+							<main className="flex flex-col grow p-4 gap-4">{children}</main>
+						</div>
+					</SidebarProvider>
+				</ThemeProvider>
+
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",
