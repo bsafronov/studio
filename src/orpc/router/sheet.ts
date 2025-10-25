@@ -76,7 +76,28 @@ const updateSheet = authProcedure
 	});
 
 const getSheets = baseProcedure.handler(async ({ context }) => {
-	return context.db.query.sheetsTable.findMany();
+	return context.db.query.sheetsTable.findMany({
+		with: {
+			workspace: {
+				columns: {
+					id: true,
+					name: true,
+				},
+			},
+			createdBy: {
+				columns: {
+					id: true,
+					username: true,
+				},
+			},
+			updatedBy: {
+				columns: {
+					id: true,
+					username: true,
+				},
+			},
+		},
+	});
 });
 
 const GetSheetByIdSchema = z.object({ sheetId: z.string() });
