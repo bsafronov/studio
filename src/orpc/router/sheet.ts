@@ -4,6 +4,7 @@ import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
 import z from "zod";
 import { sheetColumnsTable, sheetRowsTable, sheetsTable } from "@/db/schema";
 import { authProcedure, baseProcedure } from "../utils";
+import { withSafeUser } from "./auth";
 
 const CreateSheetSchema = createInsertSchema(sheetsTable).pick({
 	name: true,
@@ -84,18 +85,8 @@ const getSheets = baseProcedure.handler(async ({ context }) => {
 					name: true,
 				},
 			},
-			createdBy: {
-				columns: {
-					id: true,
-					username: true,
-				},
-			},
-			updatedBy: {
-				columns: {
-					id: true,
-					username: true,
-				},
-			},
+			createdBy: withSafeUser,
+			updatedBy: withSafeUser,
 		},
 	});
 });
@@ -327,8 +318,8 @@ const getRows = baseProcedure
 		const rows = await context.db.query.sheetRowsTable.findMany({
 			where: eq(sheetRowsTable.sheetId, input.sheetId),
 			with: {
-				createdBy: true,
-				updatedBy: true,
+				updatedBy: withSafeUser,
+				createdBy: withSafeUser,
 			},
 		});
 		return rows;

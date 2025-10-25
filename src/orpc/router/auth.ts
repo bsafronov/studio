@@ -7,6 +7,13 @@ import { sessionsTable, usersTable } from "@/db/schema";
 import { createSession, generateSessionToken } from "@/lib/auth";
 import { authProcedure, baseProcedure } from "../utils";
 
+export const withSafeUser = {
+	columns: {
+		id: true,
+		username: true,
+	},
+};
+
 const RegisterSchema = createInsertSchema(usersTable).pick({
 	username: true,
 	password: true,
