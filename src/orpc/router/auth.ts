@@ -12,7 +12,7 @@ export const withSafeUser = {
 		id: true,
 		username: true,
 	},
-};
+} as const;
 
 const RegisterSchema = createInsertSchema(usersTable).pick({
 	username: true,
