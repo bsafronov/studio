@@ -31,7 +31,7 @@ function RouteComponent() {
 		orpc.sheet.createColumn.mutationOptions({
 			onSuccess: () => {
 				qc.invalidateQueries({
-					queryKey: orpc.sheet.getColumns.queryKey({ input: { sheetId } }),
+					queryKey: orpc.sheet.columnList.queryKey({ input: { sheetId } }),
 				});
 				navigate({
 					to: "/sheets/$sheetId",

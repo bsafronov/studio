@@ -32,17 +32,17 @@ export const Route = createFileRoute("/sheets/$sheetId/")({
 	loader: async ({ context: { queryClient }, params: { sheetId } }) => {
 		await Promise.all([
 			queryClient.prefetchQuery(
-				orpc.sheet.getSheetById.queryOptions({
+				orpc.sheet.sheet.queryOptions({
 					input: { sheetId: sheetId },
 				}),
 			),
 			queryClient.prefetchQuery(
-				orpc.sheet.getColumns.queryOptions({
+				orpc.sheet.columnList.queryOptions({
 					input: { sheetId },
 				}),
 			),
 			queryClient.prefetchQuery(
-				orpc.sheet.getRows.queryOptions({
+				orpc.sheet.rowList.queryOptions({
 					input: { sheetId },
 				}),
 			),
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/sheets/$sheetId/")({
 	}),
 });
 
-type SheetRow = RouterOutputs["sheet"]["getRows"][number];
+type SheetRow = RouterOutputs["sheet"]["rowList"][number];
 const th = createColumnHelper<SheetRow>();
 
 const baseColumns = [
@@ -102,17 +102,17 @@ const baseColumns = [
 function RouteComponent() {
 	const { sheetId } = Route.useParams();
 	const { data: sheet } = useSuspenseQuery(
-		orpc.sheet.getSheetById.queryOptions({
+		orpc.sheet.sheet.queryOptions({
 			input: { sheetId },
 		}),
 	);
 	const { data: dynamicColumns } = useSuspenseQuery(
-		orpc.sheet.getColumns.queryOptions({
+		orpc.sheet.columnList.queryOptions({
 			input: { sheetId },
 		}),
 	);
 	const { data: rows } = useSuspenseQuery(
-		orpc.sheet.getRows.queryOptions({
+		orpc.sheet.rowList.queryOptions({
 			input: { sheetId },
 		}),
 	);

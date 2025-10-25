@@ -11,7 +11,7 @@ export const Route = createFileRoute("/sheets/$sheetId/new")({
 	component: RouteComponent,
 	loader: ({ context: { queryClient }, params: { sheetId } }) => {
 		queryClient.prefetchQuery(
-			orpc.sheet.getColumns.queryOptions({ input: { sheetId } }),
+			orpc.sheet.columnList.queryOptions({ input: { sheetId } }),
 		);
 	},
 });
@@ -21,13 +21,13 @@ function RouteComponent() {
 	const navigate = useNavigate();
 	const qc = useQueryClient();
 	const { data: columns } = useSuspenseQuery(
-		orpc.sheet.getColumns.queryOptions({ input: { sheetId } }),
+		orpc.sheet.columnList.queryOptions({ input: { sheetId } }),
 	);
 	const { mutateAsync: createRow } = useMutation(
 		orpc.sheet.createRow.mutationOptions({
 			onSuccess: () => {
 				qc.invalidateQueries({
-					queryKey: orpc.sheet.getRows.queryKey({ input: { sheetId } }),
+					queryKey: orpc.sheet.rowList.queryKey({ input: { sheetId } }),
 				});
 				navigate({
 					to: "/sheets/$sheetId",

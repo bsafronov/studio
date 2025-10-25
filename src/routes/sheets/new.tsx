@@ -22,7 +22,7 @@ function RouteComponent() {
 		orpc.sheet.createSheet.mutationOptions({
 			onSuccess: ({ id }) => {
 				qc.invalidateQueries({
-					queryKey: orpc.sheet.getSheets.queryKey(),
+					queryKey: orpc.sheet.sheetList.queryKey(),
 				});
 				navigate({
 					to: "/sheets/$sheetId",

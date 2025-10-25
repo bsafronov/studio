@@ -12,11 +12,11 @@ import { orpc, type RouterOutputs } from "@/orpc/client";
 export const Route = createFileRoute("/sheets/")({
 	component: RouteComponent,
 	loader: ({ context }) => {
-		context.queryClient.prefetchQuery(orpc.sheet.getSheets.queryOptions());
+		context.queryClient.prefetchQuery(orpc.sheet.sheetList.queryOptions());
 	},
 });
 
-const th = createColumnHelper<RouterOutputs["sheet"]["getSheets"][number]>();
+const th = createColumnHelper<RouterOutputs["sheet"]["sheetList"][number]>();
 const columns = [
 	th.accessor("name", {
 		header: "Название",
@@ -52,7 +52,7 @@ const columns = [
 
 function RouteComponent() {
 	const { data: sheets } = useSuspenseQuery(
-		orpc.sheet.getSheets.queryOptions(),
+		orpc.sheet.sheetList.queryOptions(),
 	);
 
 	const table = useReactTable({
